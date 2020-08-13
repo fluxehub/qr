@@ -194,19 +194,20 @@ pub mod qr {
             // Add alignment patterns
             // Version 1 has none
             if self.version > 1 {
-                // TODO: Adapt for versions greater than 2
-                for y in 16..21 {
-                    for x in 16..21 {
-                        if y == 16 || y == 20 {
-                            self.image[(y, x)] = 11;
-                        } else if y == 17 || y == 19 {
-                            self.image[(y, x)] = match x {
-                                16 | 20 => 11,
+                // TODO: Adapt for versions greater than 6
+                let start = self.size - 9;
+                for y in 0..5 {
+                    for x in 0..5 {
+                        if y == 0 || y == 4 {
+                            self.image[(y + start, x + start)] = 11;
+                        } else if y == 1 || y == 3 {
+                            self.image[(y + start, x + start)] = match x {
+                                0 | 4 => 11,
                                 _ => 10
                             }
                         } else {
-                            self.image[(y, x)] = match x {
-                                17 | 19 => 10,
+                            self.image[(y + start, x + start)] = match x {
+                                1 | 3 => 10,
                                 _ => 11
                             }
                         }
