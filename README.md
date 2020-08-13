@@ -1,5 +1,5 @@
 # qr
-CLI QR code generator, written in Rust, still in progress. Currently only supports version 1 and 2 codes.
+CLI QR code generator, written in Rust, still in progress. Currently only supports up to version 4 codes in byte mode only. 
 
 ### Why?
 

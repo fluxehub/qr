@@ -30,8 +30,8 @@ pub mod qr {
                 } 
             }
 
-            if version > 2 {
-                println!("Message is too long! (Must be 20 characters or less)");
+            if version > 4 {
+                println!("Message is too long! (Must be 48 characters or less)");
                 exit(0);
             }
 
@@ -95,18 +95,44 @@ pub mod qr {
         }
 
         fn generate_error_correction(&mut self) {
-            // TODO: Adapt for versions greater than 2
+            // TODO: Adapt for versions greater than 4
             // If you think I'm gonna actually implement my own Reed-Solomon algorithm in this, you're kidding yourself
-            let blocks_table = vec![(13, 1, 0), (22, 1, 0)];
+            let blocks_table = vec![(13, 13, 1, 0), (22, 22, 1, 0), (34, 18, 2, 0), (48, 26, 2, 0)];
 
-            let (per_block, group_one, group_two) = blocks_table[self.version - 1];
+            let (capacity, ec_per_block, group_one, group_two) = blocks_table[self.version - 1];
 
+            // Create specified number of EC codewords
+            let enc = Encoder::new(ec_per_block);
+
+            // Block interleaving is required when there is more than 1 block in a group
             if group_one > 1 {
-                panic!("QR code too big");
-            } else {
-                // Create specified number of EC codewords
-                let enc = Encoder::new(per_block);
+                let data_per_block = capacity / 2;
+                let mut blocks = vec![];
 
+                // Split data into required blocks
+                for block in 0..group_one {
+                    let offset = block*(data_per_block);
+                    let mut new_block = vec![];
+
+                    for i in offset..(data_per_block * (1 + block)) {
+                        new_block.push(self.data[i]);
+                    }
+
+                    println!("{}", new_block.len());
+
+                    let mut ecc = enc.encode(&new_block).ecc().to_vec();
+                    new_block.append(&mut ecc);
+                    blocks.push(new_block);
+
+                }
+
+                for i in 0..(data_per_block + ec_per_block) {
+                    for block in 0..group_one {
+                        self.payload.push(blocks[block][i]);
+                    }
+                }
+
+            } else {
                 // Get EC codewords only
                 let mut ecc = enc.encode(&self.data).ecc().to_vec();
 
