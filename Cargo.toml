@@ -1,0 +1,10 @@
+[package]
+name = "qr"
+version = "0.1.0"
+authors = ["clavierpaul <53355311+clavierpaul@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+reed-solomon = "0.2.1"
+array2d = "0.2.1"
+image = "0.23.8"
