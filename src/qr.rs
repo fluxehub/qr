@@ -2,6 +2,7 @@ pub mod qr {
     use array2d::Array2D;
     use reed_solomon::Encoder;
     use std::cmp::Ordering;
+    use std::process::exit;
     use image;
 
     type RawImage = Array2D<u8>;
@@ -27,6 +28,11 @@ pub mod qr {
                     version = v + 1;
                     break;
                 } 
+            }
+
+            if version > 2 {
+                println!("Message is too long! (Must be 20 characters or less)");
+                exit(0);
             }
 
             println!("Generating version {} QR code", version);
