@@ -614,10 +614,7 @@ pub mod qr {
 
         // Prints the QR code to terminal
         fn print_qr(&self, image: &RawImage) {
-            let gap = "  ".repeat((self.size + 4) * 2);
-
-            println!("{}", gap);
-            println!("{}", gap);
+            println!("\n");
 
             for row_iter in image.rows_iter() {
                 print!("    ");
@@ -637,8 +634,7 @@ pub mod qr {
                 println!("    ");
             }
 
-            println!("{}", gap);
-            println!("{}", gap);
+            println!("\n");
         }
 
         pub fn generate(&mut self) {
