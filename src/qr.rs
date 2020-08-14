@@ -118,8 +118,6 @@ pub mod qr {
                         new_block.push(self.data[i]);
                     }
 
-                    println!("{}", new_block.len());
-
                     let mut ecc = enc.encode(&new_block).ecc().to_vec();
                     new_block.append(&mut ecc);
                     blocks.push(new_block);
